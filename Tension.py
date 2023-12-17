@@ -197,8 +197,9 @@ plt.show()
 ####################################### Calculating the rendement Energétique #######################################
 ##Formule = Energie consommee/Energie necessaire
 
-Energie_necessaire = 285.8*(p*Volume)/(R*T)
-Energie_consommee = (Courrant*Volume*Tension)
+Energie_necessaire = 285.8*(p*np.array([O_2_Tension1[-1]-O_2_Tension1[0], O_2_Tension2[-1]-O_2_Tension2[0], O_2_Tension3[-1]-O_2_Tension3[0], O_2_Tension4[-1]-O_2_Tension4[0]]))/(R*T)
+Energie_consommee = (Courrant*Tension*(time1[-1]-time1[0]))##LE TEMPS DOIT ETRE LE MEME POUR TOUT PH
+
 evolution_rendement_energetique = Energie_consommee/Energie_necessaire #tension est un array
 
 
@@ -211,9 +212,9 @@ x = np.linspace(Tension[0],Tension[-1],100)
 ##Plot
 ax4 = plt.subplot(1, 1, 1)
 ax4.scatter(Tension,evolution_rendement_energetique)
-plt.title("Evolution du rendement énergétique en fonction de la tension")
-ax4.plot(x,polytoplot_rendement_energetique(x),label="Rendement Energétique")
+ax4.set_title("Evolution du rendement énergétique en fonction de l'intensité")
+ax4.plot(x,polytoplot_rendement_energetique(x),label="Rendement énergétique")
 ax4.legend()
-plt.xlabel("Tension [V]")
+plt.xlabel("Intensité [A]")
 plt.ylabel("Rendement Faradique")
 plt.show()

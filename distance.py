@@ -24,7 +24,7 @@ distance2 = 12
 distance3 = 13
 distance4 = 14
 Tension = np.array([1,2,3,4])
-
+distances = np.array([distance1,distance2,distance3,distance4])
 
 
 degree_vitesse = 2#MIGHT HAVE TO CHANGE DEGREE HERE WILL SET TWO
@@ -72,10 +72,24 @@ ax.grid(color='gray',linestyle='dashed')
 ax.grid(color='gray',linestyle='dashed')
 ax.legend()
 plt.xlabel("Temps [s]")
-plt.ylabel("Concentration [mol/L]")
+plt.ylabel("Volume [L]")
 
 plt.show()
 
+
+####################################### Tension(pH) #######################################
+axf = plt.subplot(1, 1, 1)
+
+axf.plot(distances,Tension, label="Tension(distance)")
+
+plt.title("Evolution de la Tension en fonction de la distance")
+axf.grid(color='gray',linestyle='dashed') 
+axf.grid(color='gray',linestyle='dashed')
+axf.legend()
+plt.xlabel("distance [cm]")
+plt.ylabel("Tension [V]")
+
+plt.show()
 
 ####################################### Calculating the speed of of apparition at each distnace #######################################
 ### d[O2]/dt
@@ -149,11 +163,11 @@ x = np.linspace(distances[0],distances[-1],100)
 ax2 = plt.subplot(1, 1, 1)
 ax2.scatter(distances,speed_H2)
 ax2.scatter(distances,speed_O2)
-plt.title("Evolution de la vitesse de [H2] et [O2] en fonction de la distance entre les deux électrodes")
-ax2.plot(x,polytoplot_H2(x),label="d[H2]/dt(d) ")
-ax2.plot(x,polytoplot_O2(x),label="d[O2]/dt(d) ")
+plt.title("Evolution de la vitesse de H2 et O2 en fonction de la distance entre les deux électrodes")
+ax2.plot(x,polytoplot_H2(x),label="dV(H2)/dt(d) ")
+ax2.plot(x,polytoplot_O2(x),label="dV(O2)/dt(d) ")
 plt.xlabel("distance [cm]")
-plt.ylabel("Vitesse de concentration [mol/(L*s)]")
+plt.ylabel("Vitesse [L/s]")
 ax2.legend()
 plt.show()
 
@@ -187,9 +201,9 @@ x = np.linspace(distances[0],distances[-1],100)
 ax3 = plt.subplot(1, 1, 1)
 ax3.scatter(distances,evolution_rendement_faradique_H2)
 ax3.scatter(distances,evolution_rendement_faradique_O2)
-plt.title("Evolution du rendement faradique de [H2] et [O2] en fonction de la distance entre les électrodes")
-ax3.plot(x,polytoplot_rendement_faradique_H2(x),label="Rendement faradique de [H2] ")
-ax3.plot(x,polytoplot_rendement_faradique_O2(x),label="Rendement faradique de [O2]")
+plt.title("Evolution du rendement faradique de H2 et O2 en fonction de la distance entre les électrodes")
+ax3.plot(x,polytoplot_rendement_faradique_H2(x),label="Rendement faradique de H2 ")
+ax3.plot(x,polytoplot_rendement_faradique_O2(x),label="Rendement faradique de O2")
 ax3.legend()
 plt.xlabel("distance [cm]")
 plt.ylabel("Rendement Faradique")
@@ -199,8 +213,10 @@ plt.show()
 ####################################### Calculating the rendement Energétique #######################################
 ##Formule = Energie consommee/Energie necessaire
 
-Energie_necessaire = 285.8*(p*Volume)/(R*T)
-Energie_consommee = (I*Volume*Tension)
+Energie_consommee = (I*Tension*(time1[-1]-time1[0]))##LE TEMPS DOIT ETRE LE MEME POUR TOUT PH
+Energie_necessaire = 285.8*(p*np.array([O_2_distance1[-1]-O_2_distance1[0], O_2_distance2[-1]-O_2_distance2[0], O_2_distance3[-1]-O_2_distance3[0], O_2_distance4[-1] - O_2_distance4[0]]))/(R*T)
+
+
 evolution_rendement_energetique = Energie_consommee/Energie_necessaire #tension est un array
 
 
@@ -213,9 +229,9 @@ x = np.linspace(distances[0],distances[-1],100)
 ##Plot
 ax4 = plt.subplot(1, 1, 1)
 ax4.scatter(distances,evolution_rendement_energetique)
-plt.title("Evolution du rendement énergétique en fonction de la distance entre les électrodes")
-ax4.plot(x,polytoplot_rendement_energetique(x),label="Rendement energétique")
+plt.title("Evolution du rendement énergétique en fonction de la distance")
+ax4.plot(x,polytoplot_rendement_energetique(x),label="Rendement énergétique")
 ax4.legend()
-plt.xlabel("distance [cm]")
+plt.xlabel("pH")
 plt.ylabel("Rendement Faradique")
 plt.show()

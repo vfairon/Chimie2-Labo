@@ -22,8 +22,8 @@ Volume = 3 #[L]
 pH1 = 10
 pH2 = 12
 pH3 = 13
-pH4 = 14
-Tension = np.array([1,2,3,4])
+Tension = np.array([1,2,3])
+pH_levels = np.array([pH1,pH2,pH3])
 
 
 
@@ -47,10 +47,6 @@ O_2_pH3 = np.array([-1,-2,-3,-4,-5]) #[L]
 time3 = np.array([1,2,3,4,5]) #[s]
 H_2_pH3 = np.array([-2,-3,-4,-5,-6]) #[L]
 
-time4 = np.array([1,2,3,4,5]) #[s]
-O_2_pH4 = np.array([2,3,4,5,6]) #[L]
-time4 = np.array([1,2,3,4,5]) #[s]
-H_2_pH4 = np.array([1.5,2,2.5,3,3.5]) #[L]
 
 
 ####################################### Plot First GRAPH f : t -> [O2], t -> [H2] for different pH level #######################################
@@ -59,13 +55,11 @@ ax = plt.subplot(1, 1, 1)
 ax.plot(time1,O_2_pH1, label="Volume d'O2 pour pH = " + str(pH1), color="blue")
 ax.plot(time2,O_2_pH2, label="Volume d'O2 pour pH =  " + str(pH2),color="blue")
 ax.plot(time3,O_2_pH3, label="Volume d'O2 pour pH = "+ str(pH3),color="blue")
-ax.plot(time4,O_2_pH4, label="Volume d'O2 pour pH = "+ str(pH4),color="blue")
 
 
 ax.plot(time1,H_2_pH1, label="Volume d'H2 pour pH =  " + str(pH1) ,color="red")
 ax.plot(time2,H_2_pH2, label="Volume d'H2 pour pH =  " + str(pH2),color="red")
 ax.plot(time3,H_2_pH3, label="Volume d'H2 pour pH =  " + str(pH3),color="red")
-ax.plot(time4,H_2_pH4, label="Volume d'H2 pour pH =  " + str(pH4),color="red")
     
 plt.title("Variation de volume d'H2 et d'O2 pour different pH")
 ax.grid(color='gray',linestyle='dashed') 
@@ -75,6 +69,23 @@ plt.xlabel("Temps [s]")
 plt.ylabel("Volume [L]")
 
 plt.show()
+
+
+
+####################################### Tension(pH) #######################################
+axf = plt.subplot(1, 1, 1)
+
+axf.plot(pH_levels,Tension, label="Tension(pH)")
+
+plt.title("Evolution de la Tension en fonction du pH")
+axf.grid(color='gray',linestyle='dashed') 
+axf.grid(color='gray',linestyle='dashed')
+axf.legend()
+plt.xlabel("pH")
+plt.ylabel("Tension [V]")
+
+plt.show()
+
 
 
 ####################################### Calculating the speed of of apparition at each pH level #######################################
@@ -98,11 +109,7 @@ der = np.polyder(poly)
 speed_O2_pH3 = der.coef[0]
 
 
-coef = np.polyfit(time4, O_2_pH4,1)
-poly = np.poly1d(coef)
-der = np.polyder(poly)
 
-speed_O2_pH4 = der.coef[0]
 
 
 ### Now the d[H2]/dt
@@ -126,17 +133,13 @@ der = np.polyder(poly)
 speed_H2_pH3 = der.coef[0]
 
 
-coef = np.polyfit(time4, H_2_pH4,1)
-poly = np.poly1d(coef)
-der = np.polyder(poly)
 
-speed_H2_pH4 = der.coef[0]
 
 
 ##Calculating arrays to plot
-pH_levels = np.array([pH1,pH2,pH3,pH4])
-speed_H2 = np.array([speed_H2_pH1,speed_H2_pH2, speed_H2_pH3, speed_H2_pH4])
-speed_O2 =  np.array([speed_O2_pH1,speed_O2_pH2,speed_O2_pH3,speed_O2_pH4])
+pH_levels = np.array([pH1,pH2,pH3])
+speed_H2 = np.array([speed_H2_pH1,speed_H2_pH2, speed_H2_pH3])
+speed_O2 =  np.array([speed_O2_pH1,speed_O2_pH2,speed_O2_pH3])
 
 ##Courbe de tendance des vitesse
 speed_poly_H2 = np.polyfit(pH_levels,speed_H2,degree_vitesse)
@@ -199,8 +202,10 @@ plt.show()
 ####################################### Calculating the rendement Energétique #######################################
 ##Formule = Energie consommee/Energie necessaire
 
-Energie_necessaire = 285.8*(p*Volume)/(R*T)
-Energie_consommee = (I*Volume*Tension)
+Energie_consommee = (I*Tension*(time1[-1]-time1[0]))##LE TEMPS DOIT ETRE LE MEME POUR TOUT PH
+Energie_necessaire = 285.8*(p*np.array([O_2_pH1[-1]-O_2_pH1[0], O_2_pH2[-1]-O_2_pH2[0], O_2_pH3[-1]-O_2_pH3[0]]))/(R*T)
+
+
 evolution_rendement_energetique = Energie_consommee/Energie_necessaire #tension est un array
 
 

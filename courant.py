@@ -182,9 +182,9 @@ x = np.linspace(I_levels[0],I_levels[-1],100)
 ax3 = plt.subplot(1, 1, 1)
 ax3.scatter(I_levels,evolution_rendement_faradique_H2)
 ax3.scatter(I_levels,evolution_rendement_faradique_O2)
-plt.title("Evolution du rendement faradique de [H2] et [O2] en fonction de l'intensité")
-ax3.plot(x,polytoplot_rendement_faradique_H2(x),label="Rendement faradique de [H2]")
-ax3.plot(x,polytoplot_rendement_faradique_O2(x),label="Rendement faradique de [O2]")
+plt.title("Evolution du rendement faradique de H2 et O2 en fonction de l'intensité")
+ax3.plot(x,polytoplot_rendement_faradique_H2(x),label="Rendement faradique de H2")
+ax3.plot(x,polytoplot_rendement_faradique_O2(x),label="Rendement faradique de O2")
 ax3.legend()
 plt.xlabel("Intensité [A]")
 plt.ylabel("Rendement Faradique")
@@ -194,8 +194,9 @@ plt.show()
 ####################################### Calculating the rendement Energétique #######################################
 ##Formule = Energie consommee/Energie necessaire
 
-Energie_necessaire = 285.8*(p*Volume)/(R*T)
-Energie_consommee = (I_levels*Volume*Tension)
+Energie_necessaire = 285.8*(p*np.array([O_2_I1[-1]-O_2_I1[0], O_2_I2[-1]-O_2_I2[0], O_2_I3[-1]-O_2_I3[0], O_2_I1[-1]-O_2_I1[0]]))/(R*T)
+Energie_consommee = (I_levels*Tension*(time1[-1]-time1[0]))##LE TEMPS DOIT ETRE LE MEME POUR TOUT PH
+
 evolution_rendement_energetique = Energie_consommee/Energie_necessaire #tension est un array
 
 
