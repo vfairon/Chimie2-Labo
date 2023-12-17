@@ -2,12 +2,9 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt 
 
-#Have to create a graph where O2 and H2 concentration are shown. 1 droite per pH
+#Have to create a graIntensité where O2 and H2 concentration are shown. 1 droite per Intensité
 
 ####################################### DATA Fixed #######################################
-
-
-
 
 R = 8.314
 T = 314 #[K]
@@ -52,7 +49,7 @@ time4 = np.array([1,2,3,4,5]) #[s]
 H_2_I4 = np.array([1.5,2,2.5,3,3.5]) #[mol/L]
 
 
-####################################### Plot First GRAPH f : t -> [O2], t -> [H2] for different I level #######################################
+####################################### Plot First GRAIntensité f : t -> [O2], t -> [H2] for different I level #######################################
 
 ax = plt.subplot(1, 1, 1)
 ax.plot(time1,O_2_I1, label="[O2] pour I = " + str(I1), color="blue")
@@ -148,9 +145,10 @@ x = np.linspace(I_levels[0],I_levels[-1],100)
 ax2 = plt.subplot(1, 1, 1)
 ax2.scatter(I_levels,speed_H2)
 ax2.scatter(I_levels,speed_O2)
-ax2.plot(x,polytoplot_H2(x),label="Evolution de la vitesse de [H2] en fonction de l'intensité")
-ax2.plot(x,polytoplot_O2(x),label="Evolution de la vitesse de [O2] en fonction de l'intensité")
+ax2.plot(x,polytoplot_H2(x),label="d[H2]/dt(I)")
+ax2.plot(x,polytoplot_O2(x),label="d[O2]/dt(I)")
 plt.xlabel("Intensité [A]")
+ax2.set_title("Evolution de la vitesse de [H2] et [O2] en fonction de l'intensité")
 plt.ylabel("Vitesse de concentration [mol/(L*s)]")
 ax2.legend()
 plt.show()
@@ -167,12 +165,10 @@ vitesse_theorique_H2 = (I_levels*R*T)/(ZH2*F)
 evolution_rendement_faradique_O2 = np.empty_like(speed_O2)
 evolution_rendement_faradique_H2 = np.empty_like(speed_H2)
 
-##Filling rendement faradique
-for i,vexpH2 in enumerate(speed_H2) :
-    evolution_rendement_faradique_H2[i] = speed_H2[i]/vitesse_theorique_H2[i]
+evolution_rendement_faradique_H2 = speed_H2/vitesse_theorique_H2
 
-for i,vexpO2 in enumerate(speed_O2) :
-    evolution_rendement_faradique_O2[i] = speed_O2[i]/vitesse_theorique_O2[i]
+evolution_rendement_faradique_O2 = speed_O2/vitesse_theorique_O2
+
 
 
 ##Courbe de tendance rendement faradique
@@ -186,8 +182,9 @@ x = np.linspace(I_levels[0],I_levels[-1],100)
 ax3 = plt.subplot(1, 1, 1)
 ax3.scatter(I_levels,evolution_rendement_faradique_H2)
 ax3.scatter(I_levels,evolution_rendement_faradique_O2)
-ax3.plot(x,polytoplot_rendement_faradique_H2(x),label="Evolution du rendement faradique de [H2] en fonction du pH")
-ax3.plot(x,polytoplot_rendement_faradique_O2(x),label="Evolution du rendement faradique de [O2] en fonction du pH")
+plt.title("Evolution du rendement faradique de [H2] et [O2] en fonction de l'intensité")
+ax3.plot(x,polytoplot_rendement_faradique_H2(x),label="Rendement faradique de [H2]")
+ax3.plot(x,polytoplot_rendement_faradique_O2(x),label="Rendement faradique de [O2]")
 ax3.legend()
 plt.xlabel("Intensité [A]")
 plt.ylabel("Rendement Faradique")
@@ -211,7 +208,8 @@ x = np.linspace(I_levels[0],I_levels[-1],100)
 ##Plot
 ax4 = plt.subplot(1, 1, 1)
 ax4.scatter(I_levels,evolution_rendement_energetique)
-ax4.plot(x,polytoplot_rendement_energetique(x),label="Evolution du rendement énergétique en fonction de l'intensité")
+ax4.set_title("Evolution du rendement énergétique en fonction de l'intensité")
+ax4.plot(x,polytoplot_rendement_energetique(x),label="Rendement énergétique")
 ax4.legend()
 plt.xlabel("Intensité [A]")
 plt.ylabel("Rendement Faradique")
